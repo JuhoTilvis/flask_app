@@ -39,5 +39,14 @@ def lisaa_tietokantaan():
     lampotilat.append(uusimittaus)
     return(json.dumps(uusimittaus))
 
+@app.route('/api/haekannasta', methods= ['GET'])
+
+def hae_tietokannasta():
+    con = sqlite3.connect("mittaukset.db3")
+    cur= con.cursor()
+    cur.execute("SELECT paiva, mittaus FROM mittaukset")
+    tiedot= cur.fetchall()
+    print(tiedot)
+
 if __name__ == "__main__":
     app.run(debug=True)
