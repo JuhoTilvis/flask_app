@@ -20,9 +20,15 @@ paivat=['Maanantai','Tiistai','Keskiviikko', 'Torstai','Perjantai','Lauantai','S
 
 @app.route('/api', methods= ['GET'])
 
-
 def index():
     return render_template("mittaukset.html", taulukko=lampotilat, paivat=paivat)
+
+@app.route('/lisaa', methods= ['POST'])
+def lisaa():
+    uusimittaus= request.get_json(force=True)
+    lampotilat.append(uusimittaus)
+    return(json.dumps(uusimittaus)) 
+
 
 @app.route('/lisaakantaan', methods= ['POST'])
 def lisaa_tietokantaan():
@@ -47,6 +53,13 @@ def hae_tietokannasta():
     cur.execute("SELECT paiva, mittaus FROM mittaukset")
     tiedot= cur.fetchall()
     print(tiedot)
+
+    kantatiedot= list()
+
+    for paivat in tiedot:
+        temp= dict(x=paivat[0], y=paivat[1])
+        kantatiedot.append(temp)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
